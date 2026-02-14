@@ -3,10 +3,27 @@
 [ext_resource type="Script" uid="uid://qo41rab62qnb" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://h06gg4kfip6k" path="res://scripts/tcp_server.gd" id="2_0xm2m"]
 
+[sub_resource type="GDScript" id="GDScript_0xm2m"]
+script/source = "extends Timer
+
+func _on_timeout() -> void:
+	# 6/h
+	Global.main.planet_current_value = clampi(Global.main.planet_current_value - 1, 0, Global.main.planet_max_value) 
+"
+
 [node name="Main" type="Node" unique_id=1323183672 node_paths=PackedStringArray("tcp_server")]
 script = ExtResource("1_ig7tw")
+planet_current_value = 1500
+planet_max_value = 3000
 tcp_server = NodePath("TCPServer")
 
 [node name="TCPServer" type="Node" parent="." unique_id=176930199]
 script = ExtResource("2_0xm2m")
 metadata/_custom_type_script = "uid://h06gg4kfip6k"
+
+[node name="AIProgressTimer" type="Timer" parent="." unique_id=1707400608]
+wait_time = 600.0
+autostart = true
+script = SubResource("GDScript_0xm2m")
+
+[connection signal="timeout" from="AIProgressTimer" to="AIProgressTimer" method="_on_timeout"]

@@ -66,7 +66,7 @@ func _process(delta: float) -> void:
 								__response.resize(2)
 								__response.encode_u8(0, 1)
 								__response.encode_u8(1, 0)
-								__response.append_array(var_to_bytes({"value": randi_range(1,80), "max_value": 30000}))
+								__response.append_array(var_to_bytes({"value": Global.main.planet_current_value, "max_value": Global.main.planet_max_value}))
 								__peer.put_data(__response)
 								__peer.disconnect_from_host()
 								__peers_to_delete.push_back(__peer)
@@ -74,12 +74,16 @@ func _process(delta: float) -> void:
 							2:		# Submit operation result
 								# OpCode | Version | Difficulty
 								var __difficulty : int = __bytes.decode_u8(3)
+								
+								# Add player progress
+								Global.main.planet_current_value += __difficulty
+								
 								var __response : PackedByteArray		# OpCode | Result | Contribution Points | Planet Data
 								__response.resize(10)
 								__response.encode_u8(0, 2)
 								__response.encode_u8(1, 0)
 								__response.encode_u64(2, __difficulty)
-								__response.append_array(var_to_bytes({"value": 70, "max_value": 30000}))
+								__response.append_array(var_to_bytes({"value": Global.main.planet_current_value, "max_value": Global.main.planet_max_value}))
 								__peer.put_data(__response)
 								__peer.disconnect_from_host()
 								__peers_to_delete.push_back(__peer)

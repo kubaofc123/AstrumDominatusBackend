@@ -1,16 +1,10 @@
-class_name Main
 extends Node
 
 #=============================== VARIABLES ===============================
 
 #================ PUBLIC ================
 
-@export_group("Setup")
-@export var port : int = 35000
-@export var planet_current_value : int = 15000
-@export var planet_max_value : int = 30000
-@export_group("Internal")
-@export var tcp_server : AstrumTCPServer = null
+var main : Main = null
 
 #================ PRIVATE ================
 
@@ -20,17 +14,6 @@ extends Node
 
 #================ PRIVATE ================
 
-func _enter_tree() -> void:
-	# Register at Global
-	Global.main = self
-	
-	
-func _ready() -> void:
-	assert(tcp_server)
-	
-	# Start TCP server
-	tcp_server.start_server(port)
-	
 #=============================== CALLBACKS ===============================
 
 ########################## END OF FILE ##########################
