@@ -51,6 +51,9 @@
 			"windows":{
 				"command": "./engine/Godot_v4.6-stable_win64.exe --editor ./project/project.godot",
 			},
+			"linux":{
+				"command": "./engine/Godot_v4.6-stable_linux.x86_64 --editor ./project/project.godot",
+			},
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -158,7 +161,7 @@
 			"label": "_CreateDockerImage",
 			"type": "shell",
 			"linux":{
-				"command": "docker build -t astrum-dominatus-backend ${workspaceFolder}/build",
+				"command": "docker build -t astrum-dominatus-backend ${workspaceFolder}",
 				"problemMatcher": []
 			}
 		},
