@@ -1,0 +1,146 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Launch Editor",
+			"dependsOn": ["_LaunchEditor"],
+			"dependsOrder": "sequence",
+			"group": {
+                "kind": "build",
+                "isDefault": true
+            }
+		},
+		{
+			"label": "Launch Packaged App",
+			"windows":{
+				"command": "./build/windows/AstrumDominatus.exe",
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true
+			}
+		},
+		{
+            "label": "---------------- BUILD ----------------",
+            "type": "shell",
+            "command": ""
+        },
+		{
+			"label": "Package Windows Release",
+			"dependsOn": ["_RemoveOldFiles", "_RemoveExportedFolder", "_RemoveShaderCache", "_MakeBuildFolderStructure", "_WriteCommitHashToFile", "_RunEditorImports", "_BuildWindowsRelease"],
+			"dependsOrder": "sequence",
+			"group": {
+                "kind": "build",
+                "isDefault": true
+            }
+		},
+		{
+            "label": "---------------- INTERNAL TASKS ----------------",
+            "type": "shell",
+            "command": ""
+        },
+		{
+			"label": "_LaunchEditor",
+			"type": "shell",
+			"windows":{
+				"command": "./engine/Godot_v4.6-stable_win64.exe --editor ./project/project.godot",
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true
+			}
+		},
+		{
+			"label": "_RemoveOldFiles",
+			"type": "shell",
+			"windows":{
+				"command": "if (Test-Path -Path '${workspaceFolder}/build') { Remove-Item -Recurse -Force '${workspaceFolder}/build' }",
+				"options": {
+					"shell": {
+						"executable": "powershell.exe"
+					}
+				},
+			}
+		},
+		{
+			"label": "_RemoveExportedFolder",
+			"type": "shell",
+			"windows":{
+				"command": "if (Test-Path -Path '${workspaceFolder}/project/.godot/exported') { Remove-Item -Recurse -Force '${workspaceFolder}/project/.godot/exported' }",
+				"options": {
+					"shell": {
+						"executable": "powershell.exe"
+					}
+				},
+			}
+		},
+		{
+			"label": "_RemoveShaderCache",
+			"type": "shell",
+			"windows":{
+				"command": "if (Test-Path -Path '${workspaceFolder}/project/.godot/shader_cache') { Remove-Item -Recurse -Force '${workspaceFolder}/project/.godot/shader_cache' }",
+				"options": {
+					"shell": {
+						"executable": "powershell.exe"
+					}
+				},
+			}
+		},
+		{
+			"label": "_MakeBuildFolderStructure",
+			"type": "shell",
+			"windows":{
+				"command": "New-Item -ItemType Directory -Path build/windows -Force; New-Item -ItemType Directory -Path build/linux -Force",
+            	"problemMatcher": [],
+				"options": {
+					"shell": {
+						"executable": "powershell.exe"
+					}
+				},
+			}
+		},
+		{
+			"label": "_WriteCommitHashToFile",
+			"type": "shell",
+      		"command": "sh",
+      		"args": [
+        		"-c",
+        		"mkdir -p project/metadata && git rev-parse --short HEAD > project/metadata/build_id.txt"
+      		],
+			"problemMatcher": []
+		},
+		{
+			"label": "_RunEditorImports",
+			"type": "shell",
+			"windows":{
+				"command": "./engine/Godot_v4.6-stable_win64.exe --editor ./project/project.godot --import",
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": true
+			}
+		},
+		{
+			"label": "_BuildWindowsRelease",
+			"type": "shell",
+			"windows":{
+				"command": "./engine/Godot_v4.6-stable_win64.exe --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Windows Release' \"${workspaceFolder}/build/windows/AstrumDominatus.exe\"",
+            	"problemMatcher": []
+			}
+		}
+	]
+}

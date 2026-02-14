@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cg0v6mxbwsoso"]
+
+[ext_resource type="Script" uid="uid://qo41rab62qnb" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://h06gg4kfip6k" path="res://scripts/http_server.gd" id="2_0xm2m"]
+
+[node name="Main" type="Node" unique_id=1323183672]
+script = ExtResource("1_ig7tw")
+
+[node name="HTTPServer" type="Node" parent="." unique_id=176930199]
+script = ExtResource("2_0xm2m")
+metadata/_custom_type_script = "uid://h06gg4kfip6k"
