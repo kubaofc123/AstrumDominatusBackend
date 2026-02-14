@@ -11,6 +11,7 @@ engine/cache/*
 engine/editor_data/shader_cache/
 engine/editor_data/editor_settings-*
 engine/*.exe
+engine/*.x86_64
 engine/editor_themes/
 engine/editor_data/text_editor_themes/
 engine/editor_data/recent_dirs

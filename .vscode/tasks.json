@@ -32,8 +32,8 @@
             "command": ""
         },
 		{
-			"label": "Package Windows Release",
-			"dependsOn": ["_RemoveOldFiles", "_RemoveExportedFolder", "_RemoveShaderCache", "_MakeBuildFolderStructure", "_WriteCommitHashToFile", "_RunEditorImports", "_BuildWindowsRelease"],
+			"label": "Package Release",
+			"dependsOn": ["_RemoveOldFiles", "_RemoveExportedFolder", "_RemoveShaderCache", "_MakeBuildFolderStructure", "_WriteCommitHashToFile", "_RunEditorImports", "_BuildRelease", "_ClearDockerImage", "_CreateDockerImage", "_SaveDockerImageToFile"],
 			"dependsOrder": "sequence",
 			"group": {
                 "kind": "build",
@@ -135,11 +135,39 @@
 			}
 		},
 		{
-			"label": "_BuildWindowsRelease",
+			"label": "_BuildRelease",
 			"type": "shell",
 			"windows":{
 				"command": "./engine/Godot_v4.6-stable_win64.exe --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Windows Release' \"${workspaceFolder}/build/windows/AstrumDominatus.exe\"",
             	"problemMatcher": []
+			},
+			"linux":{
+				"command": "./engine/Godot_v4.6-stable_linux.x86_64 --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Linux Release' \"${workspaceFolder}/build/windows/AstrumDominatus.exe\"",
+            	"problemMatcher": []
+			}
+		},
+		{
+			"label": "_ClearDockerImage",
+			"type": "shell",
+			"linux":{
+				"command": "docker rmi astrum-dominatus-backend",
+				"problemMatcher": []
+			}
+		},
+		{
+			"label": "_CreateDockerImage",
+			"type": "shell",
+			"linux":{
+				"command": "docker build -t astrum-dominatus-backend ${workspaceFolder}/build",
+				"problemMatcher": []
+			}
+		},
+		{
+			"label": "_SaveDockerImageToFile",
+			"type": "shell",
+			"linux":{
+				"command": "docker save -o ${workspaceFolder}/build/astrum-dominatus-backend.tar astrum-dominatus-backend",
+				"problemMatcher": []
 			}
 		}
 	]
