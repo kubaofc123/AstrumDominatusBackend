@@ -20,6 +20,14 @@ run/max_fps=30
 run/low_processor_mode=true
 config/icon="res://icon.svg"
 
+[debug]
+
+gdscript/warnings/unused_variable=0
+gdscript/warnings/unused_local_constant=0
+gdscript/warnings/unused_private_class_variable=0
+gdscript/warnings/unused_parameter=0
+gdscript/warnings/unused_signal=0
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

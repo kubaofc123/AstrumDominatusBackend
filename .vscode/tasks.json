@@ -138,11 +138,11 @@
 			"label": "_BuildRelease",
 			"type": "shell",
 			"windows":{
-				"command": "./engine/Godot_v4.6-stable_win64.exe --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Windows Release' \"${workspaceFolder}/build/windows/AstrumDominatus.exe\"",
+				"command": "./engine/Godot_v4.6-stable_win64.exe --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Windows Release' \"${workspaceFolder}/build/bin/AstrumDominatus.exe\"",
             	"problemMatcher": []
 			},
 			"linux":{
-				"command": "./engine/Godot_v4.6-stable_linux.x86_64 --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Linux Release' \"${workspaceFolder}/build/windows/AstrumDominatus.exe\"",
+				"command": "./engine/Godot_v4.6-stable_linux.x86_64 --headless --verbose --path \"${workspaceFolder}/project\" --export-release 'Linux Release' \"${workspaceFolder}/build/bin/AstrumDominatus.x86_64\"",
             	"problemMatcher": []
 			}
 		},
