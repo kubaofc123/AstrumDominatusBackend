@@ -3,6 +3,7 @@
 
 # Build
 build/
+build_archive/
 
 # Engine
 engine/local_data/
