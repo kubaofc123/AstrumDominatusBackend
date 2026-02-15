@@ -66,7 +66,7 @@ func _process(delta: float) -> void:
 								__response.resize(2)
 								__response.encode_u8(0, 1)
 								__response.encode_u8(1, 0)
-								__response.append_array(var_to_bytes({"value": Global.main.planet_current_value, "max_value": Global.main.planet_max_value}))
+								__response.append_array(var_to_bytes({"value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp"), "max_value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "max_hp")}))
 								__peer.put_data(__response)
 								__peer.disconnect_from_host()
 								__peers_to_delete.push_back(__peer)
@@ -74,16 +74,17 @@ func _process(delta: float) -> void:
 							2:		# Submit operation result
 								# OpCode | Version | Difficulty
 								var __difficulty : int = __bytes.decode_u8(3)
+								var __contribution_points : int = Global.main.convert_difficulty_to_contribution(__difficulty)
 								
 								# Add player progress
-								Global.main.planet_current_value += __difficulty
+								Global.main.set_planet_control_value(Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp") + __contribution_points)
 								
 								var __response : PackedByteArray		# OpCode | Result | Contribution Points | Planet Data
 								__response.resize(10)
 								__response.encode_u8(0, 2)
 								__response.encode_u8(1, 0)
-								__response.encode_u64(2, __difficulty)
-								__response.append_array(var_to_bytes({"value": Global.main.planet_current_value, "max_value": Global.main.planet_max_value}))
+								__response.encode_u64(2, __contribution_points)
+								__response.append_array(var_to_bytes({"value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp"), "max_value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "max_hp")}))
 								__peer.put_data(__response)
 								__peer.disconnect_from_host()
 								__peers_to_delete.push_back(__peer)
