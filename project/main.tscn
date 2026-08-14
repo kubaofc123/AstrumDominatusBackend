@@ -6,6 +6,7 @@
 
 [node name="Main" type="Node" unique_id=1323183672 node_paths=PackedStringArray("tcp_server", "ai_progress_timer", "config_loader_timer")]
 script = ExtResource("1_ig7tw")
+port = null
 tcp_server = NodePath("TCPServer")
 ai_progress_timer = NodePath("AIProgressTimer")
 config_loader_timer = NodePath("ConfigLoaderTimer")

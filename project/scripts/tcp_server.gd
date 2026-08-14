@@ -4,18 +4,19 @@ extends Node
 #=============================== VARIABLES ===============================
 
 #================ PUBLIC ================
-
-
  
 #================ PRIVATE ================
 
 var _tcp_server : TCPServer = null
 var _connected_peers : Array[StreamPeerTCP]
 
+enum EOpCode {STATUS_CHECK = 0, GALAXY_STATUS = 1, PLANET_STATUS = 2, SUBMIT_OPERATION_RESULT = 3}
+
 #=============================== FUNCTIONS ===============================
 
 #================ PUBLIC ================
 
+# DONE
 func start_server(p_port : int) -> void:
 	if _tcp_server:
 		push_error("start_server(): Server already running")
@@ -26,6 +27,7 @@ func start_server(p_port : int) -> void:
 	print("TCP Server started at port ", p_port)
 
 
+# DONE
 func stop_server() -> void:
 	if not _tcp_server:
 		return
@@ -36,6 +38,7 @@ func stop_server() -> void:
 	
 #================ PRIVATE ================
 
+# TODO
 func _process(delta: float) -> void:
 	if not _tcp_server:
 		return
@@ -60,31 +63,51 @@ func _process(delta: float) -> void:
 						var __op_code : int = __bytes.decode_u8(0)
 						var __version : int = __bytes.decode_u16(1)
 						match __op_code:
-							1:		# Get planet status
-								# OpCode | Version
-								var __response : PackedByteArray		# OpCode | Result | Planet Data
+							EOpCode.STATUS_CHECK:
+								var __response : PackedByteArray		# OpCode | Result
 								__response.resize(2)
-								__response.encode_u8(0, 1)
+								__response.encode_u8(0, EOpCode.STATUS_CHECK)
 								__response.encode_u8(1, 0)
-								__response.append_array(var_to_bytes({"value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp"), "max_value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "max_hp")}))
 								__peer.put_data(__response)
 								__peer.disconnect_from_host()
 								__peers_to_delete.push_back(__peer)
-								
-							2:		# Submit operation result
-								# OpCode | Version | Difficulty
+							
+							EOpCode.GALAXY_STATUS:
+								# OpCode | Version
+								var __response : PackedByteArray		# OpCode | Result | Galaxy Data
+								__response.resize(2)
+								__response.encode_u8(0, EOpCode.GALAXY_STATUS)
+								__response.encode_u8(1, 0)
+								__response.append_array(var_to_bytes(Global.main.get_galaxy_status()))
+								__peer.put_data(__response)
+								__peer.disconnect_from_host()
+								__peers_to_delete.push_back(__peer)
+							
+							EOpCode.PLANET_STATUS:							# TODO
+								# OpCode | Version | Planet Name
+								var __response : PackedByteArray		# OpCode | Result | Planet Data
+								__response.resize(2)
+								__response.encode_u8(0, EOpCode.GALAXY_STATUS)
+								__response.encode_u8(1, 0)
+								__response.append_array(var_to_bytes(Global.main.get_galaxy_status()))
+								__peer.put_data(__response)
+								__peer.disconnect_from_host()
+								__peers_to_delete.push_back(__peer)
+							
+							EOpCode.SUBMIT_OPERATION_RESULT:
+								# OpCode | Version | Difficulty | HWID | Planet
 								var __difficulty : int = __bytes.decode_u8(3)
 								var __contribution_points : int = Global.main.convert_difficulty_to_contribution(__difficulty)
 								
 								# Add player progress
-								Global.main.set_planet_control_value(Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp") + __contribution_points)
+#								Global.main.set_planet_control_value(Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp") + __contribution_points)
 								
-								var __response : PackedByteArray		# OpCode | Result | Contribution Points | Planet Data
+								var __response : PackedByteArray		# OpCode | Result | Contribution Points | Galaxy Data
 								__response.resize(10)
-								__response.encode_u8(0, 2)
+								__response.encode_u8(0, EOpCode.SUBMIT_OPERATION_RESULT)
 								__response.encode_u8(1, 0)
 								__response.encode_u64(2, __contribution_points)
-								__response.append_array(var_to_bytes({"value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "current_hp"), "max_value": Global.main.loaded_planet_ercaris_config_file.get_value("hp", "max_hp")}))
+								__response.append_array(var_to_bytes(Global.main.get_galaxy_status()))
 								__peer.put_data(__response)
 								__peer.disconnect_from_host()
 								__peers_to_delete.push_back(__peer)
