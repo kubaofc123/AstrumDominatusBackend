@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  warpfire-arena-backend:
+    image: astrum-dominatus-backend
+    container_name: astrum-dominatus-backend
+    network_mode: host
+    privileged: true
+    volumes:
+      - /YOUR-ROOT-PATH-GOES-HERE-SHOULD-CONTAIN-CONFIG-AND-PLANETS-FOLDERS-UNDERNEATH >/:/app/astrum-dominatus-backend/data/
+    restart: unless-stopped
