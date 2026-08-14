@@ -1,0 +1,1 @@
+docker save -o ./build/astrum-dominatus-backend.tar astrum-dominatus-backend
