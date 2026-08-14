@@ -6,7 +6,10 @@
 
 Automation tasks are adapted for VSCode extension `Task Runner` by `Sana Ajani`.
 
-To locally test client and server applications, variable `backend_address` in `main.tscn` in `Main` node client should be set to `127.0.0.1`. For public address you can use both ip address and domain name.
+- To locally test client and server applications, variable `backend_address` in `main.tscn` in `Main` node client should be set to `127.0.0.1`. For public address you can use both ip address and domain name.
+
+- Folder `local_data` should be copied to remote server, with the folder's path added to `docker-compose.yml` in line `10`. `config` is general variables configuring the application without needing to rebuild it. `planets` folder tracks player progress on individual planets.
+
 # Deployment requirements
 1. `Docker` & `Docker Compose` installed on remote server
 2. Open port as designated in `main.tscn` in `Main` node from variable `port` in the Setup category
