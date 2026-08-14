@@ -1,0 +1,1 @@
+sudo docker image load -i ./astrum-dominatus-backend.tar
